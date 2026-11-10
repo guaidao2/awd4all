@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>awd4all · 打点工作台</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">a4</div>
+        <div>
+          <h1>awd4all</h1>
+          <p>批量打点工作台</p>
+        </div>
+      </div>
+
+      <div class="section-label">插件</div>
+      <nav id="plugin-list" class="plugin-list"></nav>
+
+      <div class="sidebar-footer">
+        <span id="conn-dot" class="dot"></span>
+        <span id="conn-text">就绪</span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h2 id="plugin-title">加载中…</h2>
+          <p id="plugin-desc" class="muted"></p>
+        </div>
+        <div class="topbar-badge" id="version">v0.1.0</div>
+      </header>
+
+      <section class="card config-card">
+        <div class="card-head">
+          <h3>参数</h3>
+          <button id="reset-params" class="ghost small" type="button">恢复默认</button>
+        </div>
+        <form id="param-form" class="param-grid" autocomplete="off"></form>
+      </section>
+
+      <section class="card target-card">
+        <div class="card-head">
+          <h3>目标范围</h3>
+          <span class="muted small">支持 CIDR / 区间 / 通配 / 端口 / <code>@文件</code></span>
+        </div>
+        <textarea id="targets" rows="3" spellcheck="false"
+          placeholder="10.0.0.0/24&#10;192.168.1.1-192.168.1.50&#10;10.1.1.*:22, 10.1.2.3:2222&#10;@targets.txt"></textarea>
+        <div class="options-row">
+          <label class="field-inline">
+            <span>并发</span>
+            <input id="concurrency" type="number" value="32" min="1" max="512">
+          </label>
+          <label class="field-inline">
+            <span>每次间隔(秒)</span>
+            <input id="delay" type="number" value="0" min="0" step="0.05">
+          </label>
+          <label class="field-inline">
+            <span>重试</span>
+            <input id="retries" type="number" value="0" min="0" max="10">
+          </label>
+          <label class="field-inline checkbox">
+            <input id="stop-on-hit" type="checkbox">
+            <span>拿到第一个 flag 就停</span>
+          </label>
+          <div class="spacer"></div>
+          <button id="stop-btn" class="ghost danger" type="button" disabled>停止</button>
+          <button id="run-btn" class="primary" type="button">开始打点</button>
+        </div>
+      </section>
+
+      <section class="stats" id="stats">
+        <div class="stat"><span class="stat-label">目标</span><strong id="stat-total">0</strong></div>
+        <div class="stat"><span class="stat-label">已完成</span><strong id="stat-started">0</strong></div>
+        <div class="stat"><span class="stat-label">flag</span><strong id="stat-flags" class="accent">0</strong></div>
+        <div class="stat"><span class="stat-label">异常</span><strong id="stat-errors">0</strong></div>
+        <div class="stat"><span class="stat-label">耗时</span><strong id="stat-elapsed">0s</strong></div>
+      </section>
+
+      <div class="progress-wrap" id="progress-wrap">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+
+      <section class="grid-two">
+        <div class="card log-card">
+          <div class="card-head">
+            <h3>实时日志</h3>
+            <button id="clear-log" class="ghost small" type="button">清空</button>
+          </div>
+          <div id="log" class="log"></div>
+        </div>
+
+        <div class="card findings-card">
+          <div class="card-head">
+            <h3>命中结果</h3>
+            <span id="findings-count" class="muted small">0</span>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>目标</th><th>结果</th></tr></thead>
+              <tbody id="findings-body">
+                <tr class="empty-row"><td colspan="2">还没有命中</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="card flags-card">
+        <div class="card-head">
+          <h3>flag 池</h3>
+          <div class="head-actions">
+            <button id="export-flags" class="ghost small" type="button">导出 CSV</button>
+            <button id="refresh-flags" class="ghost small" type="button">刷新</button>
+            <button id="clear-flags" class="ghost small danger" type="button">清空</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr><th>时间</th><th>目标</th><th>插件</th><th>flag</th></tr>
+            </thead>
+            <tbody id="flags-body">
+              <tr class="empty-row"><td colspan="4">flag 池是空的</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer class="footer muted small">
+        仅用于授权范围内的 AWD 比赛环境。flag 提交请遵守各平台规则。
+      </footer>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+  <script src="/app.js"></script>
+</body>
+</html>

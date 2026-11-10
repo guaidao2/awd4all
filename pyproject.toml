@@ -1,0 +1,34 @@
+[project]
+name = "awd4all"
+version = "0.1.0"
+description = "AWD 批量打点工作台：插件化、精细目标范围、口令喷洒与原始数据包重放"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "guaidao2" },
+    { name = "coolmoon" },
+]
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "paramiko>=3.4",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.urls]
+Homepage = "https://github.com/guaidao2/awd4all"
+Repository = "https://github.com/guaidao2/awd4all"
+Issues = "https://github.com/guaidao2/awd4all/issues"
+
+[project.scripts]
+awd4all = "awd4all.__main__:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["awd4all"]
